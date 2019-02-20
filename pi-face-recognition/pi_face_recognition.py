@@ -22,7 +22,7 @@ args = vars(ap.parse_args())
 
 # load the known faces and embeddings along with OpenCV's Haar
 # cascade for face detection
-print("[INFO] loading encodings + face detector...")
+print("Importing Vectors & Starting Face Detector")
 data = pickle.loads(open(args["encodings"], "rb").read())
 detector = cv2.CascadeClassifier(args["cascade"])
 
@@ -104,7 +104,7 @@ while True:
 	if key == ord("q"):
 		break
 
-print("Running Script!!!")
+print("Quitting :(")
 
 # do a bit of cleanup
 cv2.destroyAllWindows()
