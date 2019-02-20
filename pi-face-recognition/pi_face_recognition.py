@@ -3,7 +3,6 @@
 
 # import the necessary packages
 from imutils.video import VideoStream
-from imutils.video import FPS
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import face_recognition
@@ -28,13 +27,9 @@ data = pickle.loads(open(args["encodings"], "rb").read())
 detector = cv2.CascadeClassifier(args["cascade"])
 
 # initialize the video stream and allow the camera sensor to warm up
-print("[INFO] starting video stream...")
-# vs = VideoStream(src=0).start()
+print("Starting Video Stream")
 vs = VideoStream(usePiCamera=True).start()
 time.sleep(2.0)
-
-# start the FPS counter
-fps = FPS().start()
 
 # loop over frames from the video file stream
 while True:
@@ -68,7 +63,7 @@ while True:
 		# encodings
 		matches = face_recognition.compare_faces(data["encodings"],
 			encoding)
-		name = "Unknown"
+		name = "Unknown Face"
 
 		# check to see if we have found a match
 		if True in matches:
@@ -109,13 +104,7 @@ while True:
 	if key == ord("q"):
 		break
 
-	# update the FPS counter
-	fps.update()
-
-# stop the timer and display FPS information
-fps.stop()
-print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+print("Running Script!!!")
 
 # do a bit of cleanup
 cv2.destroyAllWindows()
