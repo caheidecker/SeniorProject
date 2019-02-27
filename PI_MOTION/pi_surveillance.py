@@ -40,7 +40,7 @@ rawCapture = PiRGBArray(camera, size=tuple(conf["resolution"]))
 
 # allow the camera to warmup, then initialize the average frame, last
 # uploaded timestamp, and frame motion counter
-print("[INFO] warming up...")
+print("Starting Up Motion")
 time.sleep(conf["camera_warmup_time"])
 avg = None
 lastUploaded = datetime.datetime.now()
@@ -61,7 +61,7 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 
 	# if the average frame is None, initialize it
 	if avg is None:
-		print("[INFO] starting background model...")
+		print("starting background model...")
 		avg = gray.copy().astype("float")
 		rawCapture.truncate(0)
 		continue
