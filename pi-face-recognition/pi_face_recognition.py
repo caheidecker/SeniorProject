@@ -11,7 +11,8 @@ import imutils
 import pickle
 import time
 import cv2
-# camera = PiCamera()
+import subprocess
+camera = PiCamera()
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascade", required=True,
@@ -28,7 +29,8 @@ detector = cv2.CascadeClassifier(args["cascade"])
 
 # initialize the video stream and allow the camera sensor to warm up
 print("Starting Video Stream")
-vs = VideoStream(usePiCamera=True).start()
+#vs = VideoStream(usePiCamera=True).start()
+vs = VideoStream(camera=True).start()
 time.sleep(2.0)
 
 # loop over frames from the video file stream
@@ -100,11 +102,17 @@ while True:
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
+    #Take Image & Email
+        NewCapture()
+
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
 		break
 
 print("Quitting :(")
+
+def NewCapture(): subprocess.call(['sudo','bash','path/to/file/filename.sh'])
+
 
 # do a bit of cleanup
 cv2.destroyAllWindows()
