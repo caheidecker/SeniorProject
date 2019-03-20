@@ -1,4 +1,3 @@
-# USAGE
 # python pi_face_recognition.py --cascade haarcascade_frontalface_default.xml --encodings encodings.pickle
 
 # import the necessary packages
@@ -12,7 +11,9 @@ import pickle
 import time
 import cv2
 import subprocess
-camera = PiCamera()
+import os
+def capture(): process=subprocess.call(['sudo','bash','/home/pi/SeniorProject/pi-face-recognition/startMotion'])
+# camera = PiCamera()
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascade", required=True,
@@ -29,8 +30,8 @@ detector = cv2.CascadeClassifier(args["cascade"])
 
 # initialize the video stream and allow the camera sensor to warm up
 print("Starting Video Stream")
-#vs = VideoStream(usePiCamera=True).start()
-vs = VideoStream(camera=True).start()
+vs = VideoStream(usePiCamera=True).start()
+#vs = VideoStream(usecamera=True).start()
 time.sleep(2.0)
 
 # loop over frames from the video file stream
@@ -39,7 +40,7 @@ while True:
 	# to 500px (to speedup processing)
 	frame = vs.read()
 	frame = imutils.resize(frame, width=500)
-	
+
 	# convert the input frame from (1) BGR to grayscale (for face
 	# detection) and (2) from BGR to RGB (for face recognition)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -71,24 +72,23 @@ while True:
 		if True in matches:
 			# find the indexes of all matched faces then initialize a
 			# dictionary to count the total number of times each face
-			# was matched
+			# was match
 			matchedIdxs = [i for (i, b) in enumerate(matches) if b]
 			counts = {}
-
+			#capture()
 			# loop over the matched indexes and maintain a count for
 			# each recognized face face
 			for i in matchedIdxs:
 				name = data["names"][i]
 				counts[name] = counts.get(name, 0) + 1
-
 			# determine the recognized face with the largest number
 			# of votes (note: in the event of an unlikely tie Python
 			# will select first entry in the dictionary)
 			name = max(counts, key=counts.get)
-		
 		# update the list of names
-		names.append(name)
-
+		names.append(name)		
+		#capture()
+		#process.wait()
 	# loop over the recognized faces
 	for ((top, right, bottom, left), name) in zip(boxes, names):
 		# draw the predicted face name on the image
@@ -103,7 +103,6 @@ while True:
 	key = cv2.waitKey(1) & 0xFF
 
     #Take Image & Email
-        NewCapture()
 
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
@@ -111,7 +110,7 @@ while True:
 
 print("Quitting :(")
 
-def NewCapture(): subprocess.call(['sudo','bash','path/to/file/filename.sh'])
+
 
 
 # do a bit of cleanup
