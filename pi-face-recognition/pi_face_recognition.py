@@ -12,7 +12,7 @@ import time
 import cv2
 import subprocess
 import os
-def capture(): process=subprocess.call(['sudo','bash','/home/pi/SeniorProject/pi-face-recognition/startMotion'])
+#def capture(): process=subprocess.call(['sudo','bash','/home/pi/SeniorProject/pi-face-recognition/startMotion'])
 # camera = PiCamera()
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -30,8 +30,8 @@ detector = cv2.CascadeClassifier(args["cascade"])
 
 # initialize the video stream and allow the camera sensor to warm up
 print("Starting Video Stream")
-vs = VideoStream(usePiCamera=True).start()
-#vs = VideoStream(usecamera=True).start()
+#vs = VideoStream(usePiCamera=True).start()
+vs = VideoStream(src=0).start()
 time.sleep(2.0)
 
 # loop over frames from the video file stream

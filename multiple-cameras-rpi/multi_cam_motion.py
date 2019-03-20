@@ -13,7 +13,7 @@ import cv2
 
 # initialize the video streams and allow them to warmup
 print("[INFO] starting cameras...")
-webcam = VideoStream(src=0).start()
+#webcam = VideoStream(usePiCamera=True).start()
 picam = VideoStream(usePiCamera=True).start()
 time.sleep(2.0)
 
