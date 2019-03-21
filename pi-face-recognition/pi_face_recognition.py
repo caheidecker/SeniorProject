@@ -118,7 +118,6 @@ while True:
 	# to 500px (to speedup processing)
 	frame = vs.read()
 	frame = imutils.resize(frame, width=500)
-        stream()
 	# convert the input frame from (1) BGR to grayscale (for face
 	# detection) and (2) from BGR to RGB (for face recognition)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -164,8 +163,7 @@ while True:
 			name = max(counts, key=counts.get)
 		# update the list of names
 		names.append(name)		
-		#capture()
-		#process.wait()
+		stream()
 	# loop over the recognized faces
 	for ((top, right, bottom, left), name) in zip(boxes, names):
 		# draw the predicted face name on the image
