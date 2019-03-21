@@ -40,8 +40,6 @@ print("Starting Video Stream")
 #vs = VideoStream(usePiCamera=True).start()
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
-
-
 PAGE="""\
 <html>
 <head>
@@ -114,35 +112,17 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
-#with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
-with vs as camera:
-    output = StreamingOutput()
-    #Uncomment the next line to change your Pi's Camera rotation (in degrees)
-    #camera.rotation = 90
-    camera.start_recording(output, format='mjpeg')
-    try:
-        address = ('192.168.1.143', 8000)
-        server = StreamingServer(address, StreamingHandler)
-        server.serve_forever()
-    finally:
-        vs.stop()
-
-
-
-
-
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the threaded video stream and resize it
 	# to 500px (to speedup processing)
 	frame = vs.read()
 	frame = imutils.resize(frame, width=500)
-
+        stream()
 	# convert the input frame from (1) BGR to grayscale (for face
 	# detection) and (2) from BGR to RGB (for face recognition)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
 	# detect faces in the grayscale frame
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1, 
 		minNeighbors=5, minSize=(30, 30),
@@ -206,10 +186,20 @@ while True:
 		break
 
 print("Quitting :(")
-
-
-
-
 # do a bit of cleanup
 cv2.destroyAllWindows()
 vs.stop()
+
+#with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
+def stream():
+    with frame as camera:
+        output = StreamingOutput()
+    #Uncomment the next line to change your Pi's Camera rotation (in degrees)
+    #camera.rotation = 90
+    #camera.start_recording(output, format='mjpeg')
+    try:
+        address = ('192.168.1.143', 8000)
+        server = StreamingServer(address, StreamingHandler)
+        server.serve_forever()
+    finally:
+        camera.stop_recording()
