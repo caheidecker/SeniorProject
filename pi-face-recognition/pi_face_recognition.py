@@ -1,4 +1,5 @@
-# python pi_face_recognition.py --cascade haarcascade_frontalface_default.xml --encodings encodings.pickle
+#Original code based on Adrian's piimages blog postings altered and tweaked to meet my needs and variables being passed in.  
+#python pi_face_recognition.py --cascade haarcascade_frontalface_default.xml --encodings encodings.pickle
 
 # import the necessary packages
 from imutils.video import VideoStream
@@ -19,8 +20,6 @@ import socketserver
 from threading import Condition
 from http import server
 
-#def capture(): process=subprocess.call(['sudo','bash','/home/pi/SeniorProject/pi-face-recognition/startMotion'])
-# camera = PiCamera()
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--cascade", required=True,
@@ -35,11 +34,11 @@ print("Importing Vectors & Starting Face Detector")
 data = pickle.loads(open(args["encodings"], "rb").read())
 detector = cv2.CascadeClassifier(args["cascade"])
 
-# initialize the video stream and allow the camera sensor to warm up
 print("Starting Video Stream")
-#vs = VideoStream(usePiCamera=True).start()
-vs = VideoStream(src=0).start()
+vs = VideoStream(src=0).start() #usb Camera
 time.sleep(2.0)
+
+#HTML page for video stream
 PAGE="""\
 <html>
 <head>
@@ -112,6 +111,7 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
+
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -151,7 +151,6 @@ while True:
 			# was match
 			matchedIdxs = [i for (i, b) in enumerate(matches) if b]
 			counts = {}
-			#capture()
 			# loop over the matched indexes and maintain a count for
 			# each recognized face face
 			for i in matchedIdxs:
@@ -163,21 +162,19 @@ while True:
 			name = max(counts, key=counts.get)
 		# update the list of names
 		names.append(name)		
-		stream()
 	# loop over the recognized faces
 	for ((top, right, bottom, left), name) in zip(boxes, names):
 		# draw the predicted face name on the image
 		cv2.rectangle(frame, (left, top), (right, bottom),
 			(0, 255, 0), 2)
+        #cv2.circle(left, top), (right, bottom),(0, 255, 0), 2)
 		y = top - 15 if top - 15 > 15 else top + 15
 		cv2.putText(frame, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
 			0.75, (0, 255, 0), 2)
 
 	# display the image to our screen
-	cv2.imshow("Frame", frame)
+    cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
-
-    #Take Image & Email
 
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
@@ -188,16 +185,12 @@ print("Quitting :(")
 cv2.destroyAllWindows()
 vs.stop()
 
-#with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
-def stream():
-    with src as camera:
-        output = StreamingOutput()
-    #Uncomment the next line to change your Pi's Camera rotation (in degrees)
-    #camera.rotation = 90
-    #camera.start_recording(output, format='mjpeg')
-    try:
-        address = ('192.168.1.143', 8000)
-        server = StreamingServer(address, StreamingHandler)
-        server.serve_forever()
-    finally:
-        camera.stop_recording()
+#with pi as camera: #@TODO with frame doesnt work. Need to pass in the feed here and then stream and port forward it.
+#camera.rotation = 90
+try:
+    address = ('0.0.0.0', 8000)
+    server = StreamingServer(address, StreamingHandler)
+    server.serve_forever()
+finally:
+    vs.stop()
+#TODO integrate servo motor to pan back and forth until frame is close to x = 0...
