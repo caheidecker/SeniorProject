@@ -176,7 +176,14 @@ while True:
     cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
-	# if the `q` key was pressed, break from the loop
+	# if the `q` key was presse
+	# 
+	# 
+	# 
+
+
+
+	# d, break from the loop
 	if key == ord("q"):
 		break
 
@@ -192,5 +199,7 @@ try:
     server = StreamingServer(address, StreamingHandler)
     server.serve_forever()
 finally:
+   
+   
     vs.stop()
 #TODO integrate servo motor to pan back and forth until frame is close to x = 0...
