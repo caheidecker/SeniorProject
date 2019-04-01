@@ -190,7 +190,7 @@ vs.stop()
 #camera.rotation = 90
 frame = StreamingOutput()
 try:
-    address = ('0.0.0.0', 5000)
+    address = ('192.168.1.143', 8000)
     server = StreamingServer(address, StreamingHandler)
     server.serve_forever()
 finally:
