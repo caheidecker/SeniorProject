@@ -165,7 +165,7 @@ while True:
 	# loop over the recognized faces
 	for ((top, right, bottom, left), name) in zip(boxes, names):
 		# draw the predicted face name on the image
-		cv2.circle(frame, (left, top), (right, bottom),
+		cv2.rectangle(frame, (left, top), (right, bottom),
 			(0, 255, 0), 2)
 		y = top - 15 if top - 15 > 15 else top + 15
 		cv2.putText(frame, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX,
@@ -188,12 +188,11 @@ vs.stop()
 #cv2.circle(left, top), (right, bottom),(0, 255, 0), 2)
 #with pi as camera: #@TODO with frame doesnt work. Need to pass in the feed here and then stream and port forward it.
 #camera.rotation = 90
+frame = StreamingOutput()
 try:
-    address = ('0.0.0.0', 8000)
+    address = ('192.168.1.143', 8000)
     server = StreamingServer(address, StreamingHandler)
     server.serve_forever()
 finally:
-   
-   
     vs.stop()
 #TODO integrate servo motor to pan back and forth until frame is close to x = 0...
