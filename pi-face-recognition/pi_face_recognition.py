@@ -180,14 +180,6 @@ while True:
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
 		break
-
-print("Quitting :(")
-# do a bit of cleanup
-cv2.destroyAllWindows()
-vs.stop()
-#cv2.circle(left, top), (right, bottom),(0, 255, 0), 2)
-#with pi as camera: #@TODO with frame doesnt work. Need to pass in the feed here and then stream and port forward it.
-#camera.rotation = 90
 frame = StreamingOutput()
 try:
     address = ('192.168.1.143', 8000)
@@ -195,4 +187,18 @@ try:
     server.serve_forever()
 finally:
     vs.stop()
+print("Quitting :(")
+# do a bit of cleanup
+cv2.destroyAllWindows()
+vs.stop()
+#cv2.circle(left, top), (right, bottom),(0, 255, 0), 2)
+#with pi as camera: #@TODO with frame doesnt work. Need to pass in the feed here and then stream and port forward it.
+#camera.rotation = 90
+#frame = StreamingOutput()
+#try:
+#    address = ('192.168.1.143', 8000)
+#    server = StreamingServer(address, StreamingHandler)
+#    server.serve_forever()
+#finally:
+#    vs.stop()
 #TODO integrate servo motor to pan back and forth until frame is close to x = 0...
